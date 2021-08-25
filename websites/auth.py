@@ -1,9 +1,12 @@
 import time
+from . import db
 from flask import Blueprint,render_template,redirect,url_for,request
 from flask.helpers import flash
 auth = Blueprint('auth', __name__)
 from .models import User
+from werkzeug.security import generate_password_hash, check_password_hash
 import re
+from flask_login import login_user,login_required,current_user,logout_user	
 regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
 def check(email):
 	if(re.match(regex, email) ):
@@ -58,18 +61,52 @@ def login():
 			if not check(email) :
 				flash('Invalid email address', 'error')
 				return redirect(url_for('auth.login'))
-			if not password_check(password):
+			elif not password_check(password):
 				flash('Invalid password', 'error')
 				return redirect(url_for('auth.login'))
-		
+			else:
+				user =User.query.filter_by(email=email).first()
+				if user:
+					if check_password_hash(user.password, password):
+						flash('You are logged in', 'success')
+						login_user(user,remember=True)
+						return redirect(url_for('views.index'))
+					else:
+						flash('Password is incorrect', 'error')
+						return redirect(url_for('auth.login'))
+				else:
+					flash('User does not exist', 'error')
+					return redirect(url_for('auth.login'))
+
+		elif email==None and password==None and username!=None and signemail!=None and signpass!=None:
+			user=User.query.filter_by(email=signemail).first()
+			if user:
+				flash('User already exists', 'error')
+				return redirect(url_for('auth.login'))
+
+			elif not check(signemail) :
+				flash('Invalid email address', 'error')
+				return redirect(url_for('auth.login'))
+			elif not password_check(signpass):
+				flash('Invalid password', 'error')
+				return redirect(url_for('auth.login'))
+			else:
+				new_user = User(username=username,email=signemail,password=generate_password_hash(signpass, method='sha256'))
+				db.session.add(new_user)
+				db.session.commit()
+				flash('User created successfully', 'success')
+				login_user(user,remember=True)
+				return redirect(url_for('views.index'))
+
+
 		# new_user = User(email=email, password=password)
-	return render_template('login.html')
+	return render_template('login.html',user=current_user)
 
 
 @auth.route('/logout')
+@login_required
 def logout():
 	# render_template('logout.html')
-	# sleep for 5 seconds
-	time.sleep(2)
-	return redirect(url_for('views.index'))
+	logout_user()
+	return redirect(url_for('auth.login'))
 

@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask_login import login_required,current_user
 from datetime import  date
 from dateutil.relativedelta import relativedelta
 from jugaad_data.nse import stock_df,index_df
@@ -79,12 +80,12 @@ def nifty_chart(df):
     
 @views.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html',user=current_user)
 
 
 @views.route('/about')
 def about():
-    return render_template('about.html')
+    return render_template('about.html',user=current_user)
 
 @views.route('/stock',methods=['GET','POST'])
 def stock():
@@ -105,15 +106,22 @@ def stock():
             # print(res)
             return render_template('stockstats.html',query=query,res=res,chart=chart(data,query).to_html(),check=check)
         
-    return render_template('stockstats.html',query=query,data=data,res=res,check=check)
+    return render_template('stockstats.html',query=query,data=data,res=res,check=check,user=current_user)
     
 
 
 @views.route('/nifty',methods=['GET','POST'])
 def nifty():
     data=index_df(symbol="NIFTY 50", from_date=date.today()-relativedelta(months=6),to_date=date.today())    
-    return render_template('nifty.html',chart=nifty_chart(data).to_html())
+    return render_template('nifty.html',chart=nifty_chart(data).to_html(),user=current_user)
 
 @views.route('/portfolio')
+@login_required
 def portfolio():
-    return render_template('portfolio.html')
+    # get username from data 
+    # username = current_user.username
+    return render_template('portfolio.html',user=current_user)
+    
+
+
+

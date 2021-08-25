@@ -12,12 +12,12 @@
   <div class="container">
     <div class="profile-header">
       <div class="profile-img">
-        <img src="https://avatars.dicebear.com/api/identicon/VisionTonyson.svg?margin=16" width="200" alt="Profile Image" />
+        <img src="https://avatars.dicebear.com/api/identicon/{{user.username}}.svg?margin=16" width="200" alt="Profile Image" />
       </div>
       <div class="profile-nav-info">
-        <h3 class="user-name">Vision Tonyson</h3>
+        <h3 class="user-name">{{user.username}}</h3>
         <div class="email">
-          <p>wandavision@gmail.com</p>
+          <p>{{user.email}}</p>
         </div>
       </div>
     </div>
@@ -38,24 +38,15 @@
         </div>
       </div>
         <div class="profile-body">
+  {% for project in projects %}}          
+
           <div class="card">
           
             <p>
               Lorem ipsum dolor sit amet,
             </p>
           </div>
-         <div class="card">
-            
-            <p>
-              Lorem ipsum dolor sit amet,
-            </p>
-         </div>
-         <div class="card">
-            
-          <p>
-            Lorem ipsum dolor sit amet,
-          </p>
-       </div>
+         
           
          </div>
       </div>
