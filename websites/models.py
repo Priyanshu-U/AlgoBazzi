@@ -8,7 +8,6 @@ class User(UserMixin,db.Model):
     password = db.Column(db.String(64))
     email = db.Column(db.String(64), unique=True)
     cards = db.relationship('Card', backref='author', lazy='dynamic')
-
     def __repr__(self):
         return '<User %r>' % self.username
 
