@@ -95,7 +95,7 @@ def login():
 				db.session.add(new_user)
 				db.session.commit()
 				flash('User created successfully', 'success')
-				login_user(user,remember=True)
+				login_user(new_user)
 				return redirect(url_for('views.index'))
 
 

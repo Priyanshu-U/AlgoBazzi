@@ -7,12 +7,13 @@
   href="{{ url_for('static',filename='styles/portfolio.css')}}"
 />
 
-{%endblock%} {% block content%}
+{%endblock%}
+ {% block content%}
 <body>
   <div class="container">
     <div class="profile-header">
       <div class="profile-img">
-        <img src="https://avatars.dicebear.com/api/identicon/{{user.username}}.svg?margin=16" width="200" alt="Profile Image" />
+        <img src="https://avatars.dicebear.com/api/gridy/{{user.username}}.svg?margin=16" width="200" alt="Profile Image" />
       </div>
       <div class="profile-nav-info">
         <h3 class="user-name">{{user.username}}</h3>
@@ -37,8 +38,7 @@
           </div>
         </div>
       </div>
-        <div class="profile-body">
-  {% for project in projects %}}          
+        <div class="profile-body"> 
 
           <div class="card">
           
