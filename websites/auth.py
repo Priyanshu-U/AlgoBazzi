@@ -47,7 +47,7 @@ def password_check(passwd):
 		return val
 
 
-@auth.route('/signup', methods=['GET','POST'])
+@auth.route('/login', methods=['GET','POST'])
 def login():
 	if request.method == 'POST':	
 		email=request.form.get('logemail')

@@ -9,7 +9,8 @@ from nsetools import Nse
 import plotly.graph_objects as go
 import plotly.io as pio
 pio.templates.default = "plotly_dark"
-
+from .models import Card
+from . import db
 views = Blueprint('views', __name__)
 nse = Nse()
 
@@ -83,10 +84,10 @@ def index():
     return render_template('index.html',user=current_user)
 
 
-@views.route('/about')
+@views.route('/contributers')
 # @login_required
 def about():
-    return render_template('about.html',user=current_user)
+    return render_template('contributers.html',user=current_user)
 
 @views.route('/stock',methods=['GET','POST'])
 # @login_required
@@ -100,15 +101,18 @@ def stock():
 
         if nse.is_valid_code(query)==False:
             flash('Invalid Stock Code',category='error')
-            return render_template('stockstats.html',query=query,data=data,res=res,check=check,user=current_user)
+            return render_template('stonks.html',query=query,data=data,res=res,check=check,user=current_user)
         elif nse.is_valid_code(query)==True:
             data=stock_df(symbol=query, from_date=date.today()-relativedelta(months=6),to_date=date.today(), series="EQ")
             res=stonks(data) 
-            check=1       
+            check=1 
+            card=Card(query=query,user_id=current_user.id,type="Stonk")      
+            db.session.add(card)
+            db.session.commit()
             # print(res)
-            return render_template('stockstats.html',query=query,res=res,chart=chart(data,query).to_html(),check=check,user=current_user)
+            return render_template('stonks.html',query=query,res=res,chart=chart(data,query).to_html(),check=check,user=current_user)
         
-    return render_template('stockstats.html',query=query,data=data,res=res,check=check,user=current_user)
+    return render_template('stonks.html',query=query,data=data,res=res,check=check,user=current_user)
     
 
 
@@ -116,14 +120,18 @@ def stock():
 # @login_required
 def nifty():
     data=index_df(symbol="NIFTY 50", from_date=date.today()-relativedelta(months=6),to_date=date.today())    
+    card=Card(query="NIFTY 50",user_id=current_user.id,type="Nifty")
+    db.session.add(card)
+    db.session.commit()
+    
     return render_template('nifty.html',chart=nifty_chart(data).to_html(),user=current_user)
 
-@views.route('/portfolio')
+@views.route('/profile')
 @login_required
-def portfolio():
+def profile():
     # get username from data 
     # username = current_user.username
-    return render_template('portfolio.html',user=current_user)
+    return render_template('profile.html',user=current_user)
     
 
 

@@ -4,9 +4,23 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="apple-touch-icon" sizes="180x180" href="../static/images/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="../static/images/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="../static/images/favicon-16x16.png" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="../static/images/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="../static/images/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="../static/images/favicon-16x16.png"
+    />
     <link rel="manifest" href="../static/images/site.webmanifest" />
     <link
       rel="stylesheet"
@@ -62,25 +76,46 @@
                         >Strategies</a
                       >
                       <div class="dropdown-menu">
-                        <a class="dropdown-item" href="https://www.investopedia.com/terms/r/rsi.asp">Relative Strength Index</a>
-                        <a class="dropdown-item" href="https://www.investopedia.com/ask/answers/071414/whats-difference-between-moving-average-and-weighted-moving-average.asp">Moving Averages</a>
-                        <a class="dropdown-item" href="https://www.investopedia.com/terms/s/stochasticoscillator.asp">Stochastic Oscillator</a>
-                        <a class="dropdown-item" href="#">Prediction Model</a>
+                        <a
+                          class="dropdown-item"
+                          href="https://www.investopedia.com/terms/r/rsi.asp"
+                          >Relative Strength Index</a
+                        >
+                        <a
+                          class="dropdown-item"
+                          href="https://www.investopedia.com/ask/answers/071414/whats-difference-between-moving-average-and-weighted-moving-average.asp"
+                          >Moving Averages</a
+                        >
+                        <a
+                          class="dropdown-item"
+                          href="https://www.investopedia.com/terms/s/stochasticoscillator.asp"
+                          >Stochastic Oscillator</a
+                        >
+                        <a
+                          class="dropdown-item"
+                          href="https://github.com/DrXfqqt/Algo-Trading/blob/main/Algo%20Trading.ipynb"
+                          >Prediction Model</a
+                        >
+                        <a
+                          class="dropdown-item"
+                          href="https://github.com/gopixiedust/Algo-Bazziiii"
+                          >Source Code</a
+                        >
                       </div>
                     </li>
                     <li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
-                      <a class="nav-link" href="/about">Contributers</a>
+                      <a class="nav-link" href="/contributers">Contributers</a>
                     </li>
                     {% if user.is_authenticated %}
                     <li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
-                      <a class="nav-link" href="/portfolio">User Profile</a>
+                      <a class="nav-link" href="/profile">User Profile</a>
                     </li>
                     <li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
                       <a class="nav-link" href="/logout">Logout</a>
                     </li>
                     {% else %}
                     <li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
-                      <a class="nav-link" href="/signup">Login</a>
+                      <a class="nav-link" href="/login">Login</a>
                     </li>
                     {%endif%}
                   </ul>
@@ -110,9 +145,9 @@
         text-align: center;
         position: fixed;
         bottom: 0;
-        width: 50%;
+        width: 75%;
         margin: 1vh 5vh;
-        font-size: 20px;
+        font-size: 1.2rem;
       }
       .alert-error {
         background-color: #f44336;

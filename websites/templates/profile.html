@@ -1,10 +1,10 @@
 {% extends "basic.html"%} {%block head%}
-<title>User Portfolio</title>
+<title>{{user.username}}'s Profile</title>
 
 <link
   rel="stylesheet"
   type="text/css"
-  href="{{ url_for('static',filename='styles/portfolio.css')}}"
+  href="{{ url_for('static',filename='styles/profile.css')}}"
 />
 
 {%endblock%}
@@ -24,29 +24,30 @@
     </div>
    
     <div class="main-bd">
-      <!-- <div class="left-side">
+      <div class="left-side">
         <div class="profile-side">
          
           <div class="user-bio">
-            <h3>Bio</h3>
+            <h3>bio</h3>
             <p class="bio">
-              Lorem ipsum dolor sit amet, hello how consectetur adipisicing
-              elit. Sint consectetur provident magni yohoho consequuntur,
-              voluptatibus ghdfff exercitationem at quis similique. Optio,
-              amet!
+hi
             </p>
           </div>
         </div>
-      </div> -->
+      </div>
         <div class="profile-body"> 
-
           <div class="card">
-          
             <p>
-              Lorem ipsum dolor sit amet,
+              Type|Input|Time
             </p>
           </div>
-         
+          {% for card in user.cards %}
+          <div class="card">
+            <p>
+              {{card.type}}|{{card.query}}|{{card.date}}
+            </p>
+          </div>
+         {% endfor %}
           
          </div>
       </div>

@@ -24,6 +24,7 @@ main {
 .chart .modebar-group:last-child {
   visibility: hidden;
 }
+
 .info p {
   font-size: 5vw;
   background-color: rgba(0, 0, 0, 0.158);
