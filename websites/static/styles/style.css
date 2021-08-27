@@ -88,8 +88,9 @@ body {
   padding: 0;
 }
 .navbar-brand img {
-  height: 45px;
+  height: 50px;
   width: auto;
+  transform:scale(1.9);
   display: block;
   filter: brightness(10%);
   -webkit-transition: all 0.3s ease-out;
@@ -473,6 +474,9 @@ body.dark .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon {
   .nav-item:after {
     display: none;
   }
+  .navbar-brand{
+    transform: scale(1);
+  }
   .nav-item::before {
     position: absolute;
     display: block;
@@ -522,6 +526,11 @@ body.dark .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon {
     background-color: transparent;
     box-shadow: none;
   }
+@media screen and (max-width: 575px) {
+  .navbar-brand{
+    transform: scale(0.7);
+  }
+}
 }
 .logo {
   position: absolute;
