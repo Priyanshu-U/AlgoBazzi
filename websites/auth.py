@@ -81,7 +81,7 @@ def login():
 		elif email==None and password==None and username!=None and signemail!=None and signpass!=None:
 			user=User.query.filter_by(email=signemail).first()
 			if user:
-				flash('User already exists', 'error')
+				flash('Username/Email already in use', 'error')
 				return redirect(url_for('auth.login'))
 
 			elif not check(signemail) :

@@ -84,10 +84,12 @@ def index():
 
 
 @views.route('/about')
+# @login_required
 def about():
     return render_template('about.html',user=current_user)
 
 @views.route('/stock',methods=['GET','POST'])
+# @login_required
 def stock():
     query=""
     data=pd.DataFrame()
@@ -98,19 +100,20 @@ def stock():
 
         if nse.is_valid_code(query)==False:
             flash('Invalid Stock Code',category='error')
-            return render_template('stockstats.html',query=query,data=data,res=res,check=check)
+            return render_template('stockstats.html',query=query,data=data,res=res,check=check,user=current_user)
         elif nse.is_valid_code(query)==True:
             data=stock_df(symbol=query, from_date=date.today()-relativedelta(months=6),to_date=date.today(), series="EQ")
             res=stonks(data) 
             check=1       
             # print(res)
-            return render_template('stockstats.html',query=query,res=res,chart=chart(data,query).to_html(),check=check)
+            return render_template('stockstats.html',query=query,res=res,chart=chart(data,query).to_html(),check=check,user=current_user)
         
     return render_template('stockstats.html',query=query,data=data,res=res,check=check,user=current_user)
     
 
 
 @views.route('/nifty',methods=['GET','POST'])
+# @login_required
 def nifty():
     data=index_df(symbol="NIFTY 50", from_date=date.today()-relativedelta(months=6),to_date=date.today())    
     return render_template('nifty.html',chart=nifty_chart(data).to_html(),user=current_user)

@@ -15,4 +15,5 @@ class Card(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     query=db.Column(db.String(64))
     date = db.Column(db.DateTime(timezone=True), default=func.now())
+    prediction=db.Column(db.String(64))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
