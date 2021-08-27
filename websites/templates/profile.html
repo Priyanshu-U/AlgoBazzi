@@ -29,17 +29,26 @@
          
           <div class="user-bio">
             <h3>bio</h3>
+            <form  method="POST">
+              <input
+              name="bio"
+              id="bio"
+                type="text"
+              />
+            </form>
             <p class="bio">
-hi
+             
             </p>
           </div>
         </div>
       </div>
         <div class="profile-body"> 
           <div class="card">
-            <p>
-              Type|Input|Time
-            </p>
+            
+             
+              <p>  {{user.bio[-1].data}}</p>
+             
+            
           </div>
           {% for card in user.cards %}
           <div class="card">
@@ -56,5 +65,11 @@ hi
   <!-- partial -->
   <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
   <!-- <script src="../static/scripts/portfolio.js"></script> -->
+  <script> document.getElementById("form").addEventListener("keyup", function (event) {
+    if (event.keyCode === 13) {
+      document.getElementById("form").submit();
+      return false;
+    }
+  });</script>
 </body>
 {%endblock%}

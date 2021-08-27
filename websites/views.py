@@ -9,7 +9,7 @@ from nsetools import Nse
 import plotly.graph_objects as go
 import plotly.io as pio
 pio.templates.default = "plotly_dark"
-from .models import Card
+from .models import Card,Bio
 from . import db
 views = Blueprint('views', __name__)
 nse = Nse()
@@ -123,14 +123,19 @@ def nifty():
     card=Card(query="NIFTY 50",user_id=current_user.id,type="Nifty")
     db.session.add(card)
     db.session.commit()
-    
+
     return render_template('nifty.html',chart=nifty_chart(data).to_html(),user=current_user)
 
-@views.route('/profile')
+@views.route('/profile',methods=['GET','POST'])
 @login_required
 def profile():
-    # get username from data 
-    # username = current_user.username
+    if request.method == 'POST':
+        data=request.form.get('bio')
+        bio=Bio(user_id=current_user.id,data=data)
+        print(data)
+        print(bio.data)
+        db.session.add(bio)
+        db.session.commit()
     return render_template('profile.html',user=current_user)
     
 
