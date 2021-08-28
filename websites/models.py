@@ -15,8 +15,9 @@ class User(UserMixin,db.Model):
 class Card(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     query=db.Column(db.String(64))
-    date = db.Column(db.DateTime(timezone=False), default=func.now())
+    date = db.Column(db.String(64))
     type=db.Column(db.String(64), default='None')
+    time=db.Column(db.String(64), default='None')
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 class Bio(db.Model):

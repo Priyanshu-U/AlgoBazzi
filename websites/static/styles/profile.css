@@ -54,7 +54,7 @@ body {
 }
 
 .profile-nav-info h3 {
-  font-variant:bold;
+  font-variant: bold;
   font-size: 2.5rem;
   font-family: sans-serif;
   font-weight: bold;
@@ -88,7 +88,7 @@ body {
   z-index: 99;
   justify-content: center;
 }
-.profile-side h3 {
+.profile-side h3 ,.profile-body h3 {
   font-variant: small-caps;
   font-size: 2.5rem;
   font-family: sans-serif;
@@ -104,7 +104,34 @@ body {
   font-size: 14px;
   text-align: center;
 }
+.user-bio{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 20px;
+}
+form{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: #333;
+  margin-bottom: 2vh;
+} 
 
+input{
+  outline: none;
+  border: none;
+  border-radius: 2px;
+  padding: 2vh;
+}
+.note{
+  background: #20202a;
+  padding: 25px 30px 20px;
+  margin-bottom: 2vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 .profile-body {
   width: 1200px;
   background: #312e3f;
@@ -116,29 +143,27 @@ body {
   justify-content: center;
 }
 
+
 .card {
+  /* padding: 0; */
   background: #20202a;
   padding: 25px 30px 20px;
   margin-bottom: 2vh;
-}
-.card {
-  /* padding: 0; */
   display: flex;
   flex-direction: row;
-  justify-content:space-between;
+  justify-content: space-between;
 }
-.card span{
-  
+.card span {
   color: #ffe9a5;
   font-size: 1.2rem;
-  background-color: #45485E;
-  padding:1.5vh;
+  background-color: #45485e;
+  padding: 1.5vh;
   /* border-radius: 10px; */
 }
-.card p{
+.card p {
   color: hsl(30, 100%, 46%);
   font-size: 1.4rem;
-  padding:1.5vh;
+  padding: 1.5vh;
 }
 
 @media (max-width: 1100px) {
@@ -189,7 +214,6 @@ body {
     text-align: center;
   }
 
-
   .main-bd {
     flex-direction: column;
     padding-right: 0;
@@ -210,10 +234,8 @@ body {
   .profile-nav-info .email {
     justify-content: center;
   }
+  
 
-  .user-rating {
-    justify-content: center;
-  }
 }
 
 @media (max-width: 400px) {
@@ -224,13 +246,12 @@ body {
     right: 15px;
     top: 83%;
   }
-  .card{
+  .card {
     flex-direction: column;
   }
-  .card span{
-    padding:1vh;
+  .card span {
+    padding: 1vh;
     font: 1rem;
     text-align: center;
-
   }
 }

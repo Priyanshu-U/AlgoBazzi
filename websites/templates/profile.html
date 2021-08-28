@@ -26,32 +26,38 @@
     <div class="main-bd">
       <div class="left-side">
         <div class="profile-side">
-         
           <div class="user-bio">
-            <h3>bio</h3>
-            <form  method="POST">
+            <h3>Notes</h3>
+            <form method="POST">
               <input
               name="bio"
               id="bio"
                 type="text"
+                placeholder="Add a new note..."
+                autocomplete="off"
               />
             </form>
-            <p class="bio">
-             
-            </p>
+            
+             {%for i in user.bio|reverse%}
+             <div class="note"> <p class="bio">{{i.data}}</p> </div>
+              {%endfor%}
+
+           
           </div>
         </div>
       </div>
         <div class="profile-body"> 
+          <h3>History</h3>
           <div class="card">
             
-            <p>Type</p><p>Query</p><p>Date and Time</p>
+            <p>Type</p><p>Query</p><p>Date</p><p> Time</p>
         
        </div>
-          {% for card in user.cards %}
+          {% for card in user.cards|reverse %}
           <div class="card">
             
                <span>{{card.type}}</span><span>{{card.query}}</span><span>{{card.date}}</span>
+               <span>{{card.time}}</span>
            
           </div>
          {% endfor %}
@@ -60,9 +66,6 @@
       </div>
     </div>
   </div>
-  <!-- partial -->
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
-  <!-- <script src="../static/scripts/portfolio.js"></script> -->
   <script> document.getElementById("form").addEventListener("keyup", function (event) {
     if (event.keyCode === 13) {
       document.getElementById("form").submit();

@@ -1,3 +1,4 @@
+import time
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required,current_user
 from datetime import  date
@@ -108,10 +109,11 @@ def stock():
             check=1 
             # if user id logged in
             if current_user.is_authenticated:
-                card=Card(query=query,user_id=current_user.id,type="Stonk")      
+                
+                card=Card(query=query,user_id=current_user.id,type="Stonk",date=str(date.today()).split(" ")[0],time=time.strftime("%H:%M:%S", time.localtime()))  
                 db.session.add(card)
                 db.session.commit()
-            # print(res)
+                
             return render_template('stonks.html',query=query,res=res,chart=chart(data,query).to_html(),check=check,user=current_user)
         
     return render_template('stonks.html',query=query,data=data,res=res,check=check,user=current_user)
@@ -123,7 +125,7 @@ def stock():
 def nifty():
     data=index_df(symbol="NIFTY 50", from_date=date.today()-relativedelta(months=6),to_date=date.today())  
     if current_user.is_authenticated:
-        card=Card(query="NIFTY 50",user_id=current_user.id,type="Nifty")      
+        card=Card(query="NIFTY 50",user_id=current_user.id,type="Nifty",date=str(date.today()).split(" ")[0],time=time.strftime("%H:%M:%S", time.localtime()))    
         db.session.add(card)
         db.session.commit()  
     
