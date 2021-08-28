@@ -126,8 +126,11 @@
         </div>
       </div>
     </nav>
-    {% block content%} {%endblock%} {% with messages =
-    get_flashed_messages(with_categories=true) %} {% if messages %} {% for
+    {% block content%} {%endblock%} 
+    {% with messages =
+    get_flashed_messages(with_categories=true) %}
+     {% if messages %}
+      {% for
     category, message in messages %}
     <div
       class="alert alert-{{category}} alter-dismissable fade show"

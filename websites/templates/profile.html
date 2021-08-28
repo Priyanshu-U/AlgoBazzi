@@ -45,16 +45,14 @@
         <div class="profile-body"> 
           <div class="card">
             
-             
-              <p>  {{user.bio[-1].data}}</p>
-             
-            
-          </div>
+            <p>Type</p><p>Query</p><p>Date and Time</p>
+        
+       </div>
           {% for card in user.cards %}
           <div class="card">
-            <p>
-              {{card.type}}|{{card.query}}|{{card.date}}
-            </p>
+            
+               <span>{{card.type}}</span><span>{{card.query}}</span><span>{{card.date}}</span>
+           
           </div>
          {% endfor %}
           
