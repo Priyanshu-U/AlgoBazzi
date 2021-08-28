@@ -106,9 +106,11 @@ def stock():
             data=stock_df(symbol=query, from_date=date.today()-relativedelta(months=6),to_date=date.today(), series="EQ")
             res=stonks(data) 
             check=1 
-            card=Card(query=query,user_id=current_user.id,type="Stonk")      
-            db.session.add(card)
-            db.session.commit()
+            # if user id logged in
+            if current_user.is_authenticated:
+                card=Card(query=query,user_id=current_user.id,type="Stonk")      
+                db.session.add(card)
+                db.session.commit()
             # print(res)
             return render_template('stonks.html',query=query,res=res,chart=chart(data,query).to_html(),check=check,user=current_user)
         
@@ -119,10 +121,12 @@ def stock():
 @views.route('/nifty',methods=['GET','POST'])
 # @login_required
 def nifty():
-    data=index_df(symbol="NIFTY 50", from_date=date.today()-relativedelta(months=6),to_date=date.today())    
-    card=Card(query="NIFTY 50",user_id=current_user.id,type="Nifty")
-    db.session.add(card)
-    db.session.commit()
+    data=index_df(symbol="NIFTY 50", from_date=date.today()-relativedelta(months=6),to_date=date.today())  
+    if current_user.is_authenticated:
+        card=Card(query="NIFTY 50",user_id=current_user.id,type="Nifty")      
+        db.session.add(card)
+        db.session.commit()  
+    
 
     return render_template('nifty.html',chart=nifty_chart(data).to_html(),user=current_user)
 
