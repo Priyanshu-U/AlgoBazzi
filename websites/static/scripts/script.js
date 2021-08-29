@@ -77,7 +77,7 @@ console.log(res)(
       totalPercent,
       width;
 
-    const values = [0.166, 0.166, 0.5, 0.833];
+    const values = [0.166, 0.5, 0.833];
 
     if (res == -1) {
       percent = 0;

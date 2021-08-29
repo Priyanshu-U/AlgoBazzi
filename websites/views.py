@@ -17,7 +17,7 @@ nse = Nse()
 
 
 def stonks(df):        
-    returnVal=0
+    returnVal=-1
     df.drop(['SERIES', 
         'VWAP', '52W H', '52W L', 'VOLUME', 'VALUE', 'NO OF TRADES', 'SYMBOL'],inplace=True,axis=1)
     df=df[::-1]
@@ -79,65 +79,57 @@ def nifty_chart(df):
     
     return fig
 def mlmodel():
-    df = index_df(symbol="NIFTY 50", from_date=date(2016,1,1),to_date=date(2021,6,30))[::-1]
+    df = index_df(symbol="NIFTY 50", from_date=date(2016,1,1),to_date=date(2021,6,30))
+    df=df[::-1]
     training_set=df.iloc[:,6:7].values
     from sklearn.preprocessing import MinMaxScaler
-    sc=MinMaxScaler(feature_range=(0,1))
-    scaled_training_set=sc.fit_transform(training_set)
-    X_train = y_train= []
-  
-    for i in range(60,(scaled_training_set.shape[0])-1):
+    sc = MinMaxScaler(feature_range=(0, 1))
+    scaled_training_set = sc.fit_transform(training_set)
+    X_train = []
+    y_train = []
+    for i in range(60,len(scaled_training_set)):
         X_train.append(scaled_training_set[i-60:i,0:training_set.shape[1]])
         y_train.append(scaled_training_set[i,0])
-    X_train, y_train = np.array(X_train),np.array(y_train)
-    # X_train = np.reshape(X_train, (X_train.shape[0],X_train.shape[1],1))
-    X_train= X_train.reshape(-1,1)
-    
+    X_train, y_train = np.array(X_train), np.array(y_train)
+    X_train = np.reshape(X_train, (X_train.shape[0], X_train.shape[1], 1))
     y_train= y_train.reshape(-1,1)
     from keras.models import Sequential
     from keras.layers import Dense
     from keras.layers import LSTM
+    from keras.layers import Dropout
     regressor = Sequential()
-    regressor.add(LSTM(units=50,return_sequences=True,input_shape=(X_train.shape[1],1)))
-    regressor.add(LSTM(units=50,return_sequences=True))
-    regressor.add(LSTM(units=50,return_sequences=True))
+    regressor.add(LSTM(units=50, return_sequences=True, input_shape=(X_train.shape[1], 1)))
+    regressor.add(Dropout(0.2))
+    regressor.add(LSTM(units=50, return_sequences=True))
+    regressor.add(Dropout(0.2))
+    regressor.add(LSTM(units=50, return_sequences=True))
+    regressor.add(Dropout(0.2))
     regressor.add(LSTM(units=50))
+    regressor.add(Dropout(0.2))
     regressor.add(Dense(units=1))
-    regressor.compile(optimizer='adam',loss='mean_squared_error')
-    regressor.fit(X_train,y_train,epochs=100,batch_size=32)
-
-    
-    
-    # regressor.add(LSTM(units = 50,return_sequences= True, input_shape =  (X_train.shape[1], 1)))
-    # regressor.add(Dropout(0.2))
-    # regressor.add(LSTM(units = 50,return_sequences= True))
-    # regressor.add(Dropout(0.2))
-    # regressor.add(LSTM(units = 50,return_sequences= True))
-    # regressor.add(Dropout(0.2))
-    # regressor.add(LSTM(units = 50,return_sequences= True))
-    # regressor.add(Dropout(0.2))
-    # regressor.add(Dense(units = 1))
-    # regressor.compile(optimizer = 'adam', loss = 'mean_squared_error')
-    # regressor.fit(X_train, y_train, epochs = 100, batch_size = 32)
-    df_test = index_df(symbol="NIFTY 50", from_date=date(2021,7,1),to_date=date.today())[::-1]
+    regressor.compile(optimizer='adam', loss='mean_squared_error')
+    regressor.fit(X_train, y_train, epochs=50, batch_size=32)
+    df_test = index_df(symbol="NIFTY 50", from_date=date(2021,7,1),to_date=date.today())
+    df_test = df_test.iloc[::-1]
     real_stock_prices = df_test.iloc[:,6:7].values
     df_total = pd.concat((df["CLOSE"],df_test["CLOSE"]),axis = 0)
-    inputs = df_total[len(df_total)-len(df_test)-60:].values.reshape(-1,1)
+    inputs = df_total[len(df_total)-len(df_test)-60:].values
+    inputs = inputs.reshape(-1,1)
     inputs = sc.transform(inputs)
     X_test = []
     for i in range(60,inputs.shape[0]):
         X_test.append(inputs[i-60:i,0])
     X_test= np.array(X_test)
     X_test = np.reshape(X_test, (X_test.shape[0], X_test.shape[1], 1))
-    predicted_stock_prices = regressor.predict(X_test)
-    predicted_stock_prices = sc.inverse_transform(predicted_stock_prices)
+    predicted_stock_price = regressor.predict(X_test)
+    predicted_stock_price = sc.inverse_transform(predicted_stock_price)
     next_data = [inputs[len(inputs)-60:len(inputs+1),0]]
     next_data = np.array(next_data)
     next_data = np.reshape(next_data,(next_data.shape[0],next_data.shape[1],1))
-    prediction = regressor.predict(next_data)
-    prediction = sc.inverse_transform(prediction)
-    return prediction
-
+    pridiction = regressor.predict(next_data)
+    pridiction = sc.inverse_transform(pridiction)
+    print(pridiction)
+    return pridiction
 
 
 @views.route('/')
