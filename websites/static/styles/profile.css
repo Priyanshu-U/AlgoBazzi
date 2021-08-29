@@ -88,7 +88,8 @@ body {
   z-index: 99;
   justify-content: center;
 }
-.profile-side h3 ,.profile-body h3 {
+.profile-side h3,
+.profile-body h3 {
   font-variant: small-caps;
   font-size: 2.5rem;
   font-family: sans-serif;
@@ -104,34 +105,44 @@ body {
   font-size: 14px;
   text-align: center;
 }
-.user-bio{
+.user-bio {
   display: flex;
   flex-direction: column;
   justify-content: center;
   margin-top: 20px;
 }
-form{
+form {
   display: flex;
   flex-direction: column;
   justify-content: center;
   background: #333;
   margin-bottom: 2vh;
-} 
+}
 
-input{
+input {
   outline: none;
   border: none;
   border-radius: 2px;
   padding: 2vh;
 }
-.note{
+
+.note {
   background: #20202a;
   padding: 25px 30px 20px;
   margin-bottom: 2vh;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-between;
 }
+.note button {
+  outline: none;
+  color: #ffe9a5;
+}
+span {
+  color: #ffe9a5;
+  font-size: 2rem;
+}
+
 .profile-body {
   width: 1200px;
   background: #312e3f;
@@ -142,7 +153,6 @@ input{
   z-index: 1;
   justify-content: center;
 }
-
 
 .card {
   /* padding: 0; */
@@ -234,8 +244,6 @@ input{
   .profile-nav-info .email {
     justify-content: center;
   }
-  
-
 }
 
 @media (max-width: 400px) {
