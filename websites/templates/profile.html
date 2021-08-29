@@ -13,14 +13,20 @@
   <div class="container">
     <div class="profile-header">
       <div class="profile-img">
-        <img src="https://avatars.dicebear.com/api/gridy/{{user.username}}.svg?margin=16" width="200" alt="Profile Image" />
+        <img src="https://avatars.dicebear.com/api/gridy/{{user.email}}.svg?margin=16" width="200" alt="Profile Image" />
       </div>
       <div class="profile-nav-info">
         <h3 class="user-name">{{user.username}}</h3>
         <div class="email">
           <p>{{user.email}}</p>
         </div>
-      </div>
+        <div class="email ">
+        <button  on class="dlt-hist" >
+        <a href="/deletehistory">Clear History</a>
+        </button>
+         </div>
+      
+     </div>
     </div>
    
     <div class="main-bd">
@@ -28,6 +34,7 @@
         <div class="profile-side">
           <div class="user-bio">
             <h3>Notes</h3>
+            
             <form method="POST">
               <input
               name="bio"
@@ -39,10 +46,14 @@
             </form>
             
              {%for i in user.bio|reverse%}
-             <div class="note"> <p class="bio">{{i.data}}</p> </div>
+             <div class="note">
+            <p class="bio">{{i.data}}
+             </p>
+            <a href="/delete/{{i.id}}" class="close">
+              <span>&times;</span>
+            </a>
+           </div>
               {%endfor%}
-
-           
           </div>
         </div>
       </div>
@@ -56,8 +67,9 @@
           {% for card in user.cards|reverse %}
           <div class="card">
             
-               <span>{{card.type}}</span><span>{{card.query}}</span><span>{{card.date}}</span>
+               <span>{{card.type}}</span><span>{{card.query_in}}</span><span>{{card.date}}</span>
                <span>{{card.time}}</span>
+
            
           </div>
          {% endfor %}
@@ -66,11 +78,23 @@
       </div>
     </div>
   </div>
-  <script> document.getElementById("form").addEventListener("keyup", function (event) {
+  <script> 
+  document.getElementById("form").addEventListener("keyup", function (event) {
     if (event.keyCode === 13) {
       document.getElementById("form").submit();
       return false;
     }
-  });</script>
+  });
+  // function deleteNote(id){
+  //   fetch ('/deleteNote/'+id,{
+  //     method: 'POST',
+  //     body: JSON.stringify({
+  //       id: id
+  //     }),}).then((_res) => {
+  //       window.location.href('/');
+  //     });
+  //     console.log(id)
+  // }
+  </script>
 </body>
 {%endblock%}

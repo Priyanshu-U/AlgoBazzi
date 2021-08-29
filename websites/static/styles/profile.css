@@ -51,6 +51,7 @@ body {
   flex-direction: column;
   justify-content: center;
   padding-top: 60px;
+  padding-bottom: 10px;
 }
 
 .profile-nav-info h3 {
@@ -65,6 +66,34 @@ body {
   display: flex;
   font-weight: bold;
 }
+.profile-nav-info .dlt-hist{
+  display: flex;
+  /* font-weight: bold; */
+  padding: 2vh 0;
+}
+.dlt-hist {
+  text-decoration: none;
+  /* font-size: 1.1rem;
+  color: rgb(255, 0, 0); */
+  outline: none;
+  background-color: #292B38;
+   border: none;
+ /* cursor: pointer; */
+}
+.dlt-hist a {
+  text-decoration: none;
+  font-size: 1.1rem;
+  color: rgb(255, 0, 0);
+  outline: none;
+  background-color: #292B38;
+  border: none;
+  cursor: pointer;
+  
+}
+.dlt-hist a:hover{
+  color: rgb(255, 0, 0);
+}
+
 
 .profile-nav-info .email p {
   margin-right: 5px;
@@ -111,6 +140,7 @@ body {
   justify-content: center;
   margin-top: 20px;
 }
+
 form {
   display: flex;
   flex-direction: column;
@@ -134,8 +164,7 @@ input {
   flex-direction: row;
   justify-content: space-between;
 }
-.note button {
-  outline: none;
+.note a {
   color: #ffe9a5;
 }
 span {
@@ -163,12 +192,19 @@ span {
   flex-direction: row;
   justify-content: space-between;
 }
-.card span {
+/* .card span {
   color: #ffe9a5;
   font-size: 1.2rem;
   background-color: #45485e;
   padding: 1.5vh;
-  /* border-radius: 10px; */
+  border-radius: 10px;
+} */
+.card span{
+  color: #f7bb07;
+  font-size: 1.2rem;
+  /* padding: 0%;
+  margin: 0%; */
+  background: #20202A;
 }
 .card p {
   color: hsl(30, 100%, 46%);
@@ -246,7 +282,7 @@ span {
   }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 545px) {
   .profile-option {
     width: 30px;
     height: 30px;

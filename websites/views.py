@@ -1,7 +1,6 @@
-import time
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required,current_user
-from datetime import  date
+from datetime import  date,datetime
 from dateutil.relativedelta import relativedelta
 from jugaad_data.nse import stock_df,index_df
 import pandas as pd
@@ -12,6 +11,7 @@ import plotly.io as pio
 pio.templates.default = "plotly_dark"
 from .models import Card,Bio
 from . import db
+import pytz
 views = Blueprint('views', __name__)
 nse = Nse()
 
@@ -61,7 +61,6 @@ def stonks(df):
     if (so<20):
         returnVal+=1
     return returnVal
-
 def chart(df,query):
     fig = go.Figure(data=[go.Candlestick(x=df['DATE'],
                 open=df['OPEN'], high=df['HIGH'],
@@ -79,7 +78,68 @@ def nifty_chart(df):
     fig.update_layout(xaxis_rangeslider_visible=False,title='Nifty 50 Candlestick Plot')
     
     return fig
+def mlmodel():
+    df = index_df(symbol="NIFTY 50", from_date=date(2016,1,1),to_date=date(2021,6,30))[::-1]
+    training_set=df.iloc[:,6:7].values
+    from sklearn.preprocessing import MinMaxScaler
+    sc=MinMaxScaler(feature_range=(0,1))
+    scaled_training_set=sc.fit_transform(training_set)
+    X_train = y_train= []
+  
+    for i in range(60,(scaled_training_set.shape[0])-1):
+        X_train.append(scaled_training_set[i-60:i,0:training_set.shape[1]])
+        y_train.append(scaled_training_set[i,0])
+    X_train, y_train = np.array(X_train),np.array(y_train)
+    # X_train = np.reshape(X_train, (X_train.shape[0],X_train.shape[1],1))
+    X_train= X_train.reshape(-1,1)
     
+    y_train= y_train.reshape(-1,1)
+    from keras.models import Sequential
+    from keras.layers import Dense
+    from keras.layers import LSTM
+    regressor = Sequential()
+    regressor.add(LSTM(units=50,return_sequences=True,input_shape=(X_train.shape[1],1)))
+    regressor.add(LSTM(units=50,return_sequences=True))
+    regressor.add(LSTM(units=50,return_sequences=True))
+    regressor.add(LSTM(units=50))
+    regressor.add(Dense(units=1))
+    regressor.compile(optimizer='adam',loss='mean_squared_error')
+    regressor.fit(X_train,y_train,epochs=100,batch_size=32)
+
+    
+    
+    # regressor.add(LSTM(units = 50,return_sequences= True, input_shape =  (X_train.shape[1], 1)))
+    # regressor.add(Dropout(0.2))
+    # regressor.add(LSTM(units = 50,return_sequences= True))
+    # regressor.add(Dropout(0.2))
+    # regressor.add(LSTM(units = 50,return_sequences= True))
+    # regressor.add(Dropout(0.2))
+    # regressor.add(LSTM(units = 50,return_sequences= True))
+    # regressor.add(Dropout(0.2))
+    # regressor.add(Dense(units = 1))
+    # regressor.compile(optimizer = 'adam', loss = 'mean_squared_error')
+    # regressor.fit(X_train, y_train, epochs = 100, batch_size = 32)
+    df_test = index_df(symbol="NIFTY 50", from_date=date(2021,7,1),to_date=date.today())[::-1]
+    real_stock_prices = df_test.iloc[:,6:7].values
+    df_total = pd.concat((df["CLOSE"],df_test["CLOSE"]),axis = 0)
+    inputs = df_total[len(df_total)-len(df_test)-60:].values.reshape(-1,1)
+    inputs = sc.transform(inputs)
+    X_test = []
+    for i in range(60,inputs.shape[0]):
+        X_test.append(inputs[i-60:i,0])
+    X_test= np.array(X_test)
+    X_test = np.reshape(X_test, (X_test.shape[0], X_test.shape[1], 1))
+    predicted_stock_prices = regressor.predict(X_test)
+    predicted_stock_prices = sc.inverse_transform(predicted_stock_prices)
+    next_data = [inputs[len(inputs)-60:len(inputs+1),0]]
+    next_data = np.array(next_data)
+    next_data = np.reshape(next_data,(next_data.shape[0],next_data.shape[1],1))
+    prediction = regressor.predict(next_data)
+    prediction = sc.inverse_transform(prediction)
+    return prediction
+
+
+
 @views.route('/')
 def index():
     return render_template('index.html',user=current_user)
@@ -106,11 +166,10 @@ def stock():
         elif nse.is_valid_code(query)==True:
             data=stock_df(symbol=query, from_date=date.today()-relativedelta(months=6),to_date=date.today(), series="EQ")
             res=stonks(data) 
-            check=1 
-            # if user id logged in
+            check=1
             if current_user.is_authenticated:
-                
-                card=Card(query=query,user_id=current_user.id,type="Stonk",date=str(date.today()).split(" ")[0],time=time.strftime("%H:%M:%S", time.localtime()))  
+                IST=pytz.timezone('Asia/Kolkata')
+                card=Card(query_in=query,user_id=current_user.id,type="Stonk",date=datetime.now(IST).strftime('%d-%m-20%y'),time=datetime.now(IST).strftime('%H:%M:%S'))  
                 db.session.add(card)
                 db.session.commit()
                 
@@ -124,8 +183,10 @@ def stock():
 # @login_required
 def nifty():
     data=index_df(symbol="NIFTY 50", from_date=date.today()-relativedelta(months=6),to_date=date.today())  
+    # pred=mlmodel()
     if current_user.is_authenticated:
-        card=Card(query="NIFTY 50",user_id=current_user.id,type="Nifty",date=str(date.today()).split(" ")[0],time=time.strftime("%H:%M:%S", time.localtime()))    
+        IST=pytz.timezone('Asia/Kolkata')
+        card=Card(query_in="NIFTY 50",user_id=current_user.id,type="Nifty",date=datetime.now(IST).strftime('%d-%m-%Y'),time=datetime.now(IST).strftime('%H:%M:%S'))    
         db.session.add(card)
         db.session.commit()  
     
@@ -138,12 +199,36 @@ def profile():
     if request.method == 'POST':
         data=request.form.get('bio')
         bio=Bio(user_id=current_user.id,data=data)
-        print(data)
-        print(bio.data)
+        # print(data)
+        # print(bio.data)
         db.session.add(bio)
         db.session.commit()
     return render_template('profile.html',user=current_user)
-    
+
+@views.route('/delete/<int:id>')
+@login_required
+def delete_note(id):
+    delete_note=Bio.query.get_or_404(id)
+    try:    
+        db.session.delete(delete_note)
+        db.session.commit()
+        return redirect(url_for('views.profile'))
+    except:
+        return "error"
+
+@views.route('/deletehistory')
+@login_required
+def delete_history():
+    if current_user.is_authenticated:
+        delete_history=Card.query.filter_by(user_id=current_user.id).all()
+        for i in delete_history:
+            db.session.delete(i)
+            db.session.commit()
+        return redirect(url_for('views.profile'))
+    else:
+        return redirect(url_for('views.index'))
+  
+
 
 
 

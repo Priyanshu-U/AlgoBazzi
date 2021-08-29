@@ -14,7 +14,7 @@ class User(UserMixin,db.Model):
 
 class Card(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    query=db.Column(db.String(64))
+    query_in=db.Column(db.String(64))
     date = db.Column(db.String(64))
     type=db.Column(db.String(64), default='None')
     time=db.Column(db.String(64), default='None')
