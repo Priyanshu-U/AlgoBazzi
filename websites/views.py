@@ -161,7 +161,7 @@ def stock():
             check=1
             if current_user.is_authenticated:
                 IST=pytz.timezone('Asia/Kolkata')
-                card=Card(query_in=query,user_id=current_user.id,type="Stonk",date=datetime.now(IST).strftime('%d-%m-20%y'),time=datetime.now(IST).strftime('%H:%M:%S'))  
+                card=Card(query_in=query,user_id=current_user.id,type="Stonk",date=datetime.now(IST).strftime('%d-%m-20%y'),time=datetime.now(IST).strftime('%H:%M:%S'),res=res)  
                 db.session.add(card)
                 db.session.commit()
                 

@@ -16,6 +16,7 @@ class Card(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     query_in=db.Column(db.String(64))
     date = db.Column(db.String(64))
+    res=db.Column(db.Integer,default=-1)
     type=db.Column(db.String(64), default='None')
     time=db.Column(db.String(64), default='None')
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))

@@ -69,6 +69,8 @@ body {
 .profile-nav-info .dlt-hist{
   display: flex;
   /* font-weight: bold; */
+  border:none;
+  outline: none;
   padding: 2vh 0;
 }
 .dlt-hist {
