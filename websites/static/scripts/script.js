@@ -77,8 +77,10 @@ console.log(res)(
       totalPercent,
       width;
 
-    const values = [0.166, 0.5, 0.833];
-
+    const values = [0.166, 0.5,0.833, 0.833];
+    // 0.166->red
+    // 0.5->blue
+    // 0.833->green
     if (res == -1) {
       percent = 0;
     } else percent = values[res];

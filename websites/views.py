@@ -17,7 +17,7 @@ nse = Nse()
 
 
 def stonks(df):        
-    returnVal=-1
+    returnVal=0
     df.drop(['SERIES', 
         'VWAP', '52W H', '52W L', 'VOLUME', 'VALUE', 'NO OF TRADES', 'SYMBOL'],inplace=True,axis=1)
     df=df[::-1]
@@ -56,7 +56,7 @@ def stonks(df):
     df['RSI'] = 100 - (100/(1 + (ema_up/ema_down)))
     if (ema50>ema100):
         returnVal+=1
-    if (rsi<30):
+    if (rsi<45):
         returnVal+=1
     if (so<20):
         returnVal+=1
