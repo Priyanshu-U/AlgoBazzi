@@ -9,7 +9,7 @@ from nsetools import Nse
 import plotly.graph_objects as go
 import plotly.io as pio
 pio.templates.default = "plotly_dark"
-from .models import Card,Bio
+from .models import Card,Bio,Pred
 from . import db
 import pytz
 views = Blueprint('views', __name__)
@@ -108,10 +108,10 @@ def mlmodel():
     regressor.add(Dropout(0.2))
     regressor.add(Dense(units=1))
     regressor.compile(optimizer='adam', loss='mean_squared_error')
-    regressor.fit(X_train, y_train, epochs=50, batch_size=32)
+    regressor.fit(X_train, y_train, epochs=1, batch_size=32)
     df_test = index_df(symbol="NIFTY 50", from_date=date(2021,7,1),to_date=date.today())
     df_test = df_test.iloc[::-1]
-    real_stock_prices = df_test.iloc[:,6:7].values
+    # real_stock_prices = df_test.iloc[:,6:7].values
     df_total = pd.concat((df["CLOSE"],df_test["CLOSE"]),axis = 0)
     inputs = df_total[len(df_total)-len(df_test)-60:].values
     inputs = inputs.reshape(-1,1)
@@ -128,14 +128,13 @@ def mlmodel():
     next_data = np.reshape(next_data,(next_data.shape[0],next_data.shape[1],1))
     pridiction = regressor.predict(next_data)
     pridiction = sc.inverse_transform(pridiction)
-    print(pridiction)
+    print (pridiction)
     return pridiction
 
 
 @views.route('/')
 def index():
     return render_template('index.html',user=current_user)
-
 
 @views.route('/contributers')
 # @login_required
@@ -168,14 +167,11 @@ def stock():
             return render_template('stonks.html',query=query,res=res,chart=chart(data,query).to_html(),check=check,user=current_user)
         
     return render_template('stonks.html',query=query,data=data,res=res,check=check,user=current_user)
-    
-
-
+   
 @views.route('/nifty',methods=['GET','POST'])
 # @login_required
 def nifty():
-    data=index_df(symbol="NIFTY 50", from_date=date.today()-relativedelta(months=6),to_date=date.today())  
-    # pred=mlmodel()
+    data=index_df(symbol="NIFTY 50", from_date=date.today()-relativedelta(months=6),to_date=date.today()) 
     if current_user.is_authenticated:
         IST=pytz.timezone('Asia/Kolkata')
         card=Card(query_in="NIFTY 50",user_id=current_user.id,type="Nifty",date=datetime.now(IST).strftime('%d-%m-%Y'),time=datetime.now(IST).strftime('%H:%M:%S'))    
@@ -221,6 +217,17 @@ def delete_history():
         return redirect(url_for('views.index'))
   
 
-
-
+@views.route('/nifty/prediction')
+@login_required
+def prediction():
+    # if Pred has an entry for today
+    t=Pred.query.filter_by(date=str(date.today())).first()
+    if t is not None:
+        pred=t.data
+    else:
+        pred=str(mlmodel()[0,0])
+        t=Pred(date=str(date.today()),data=pred)
+        db.session.add(t)
+        db.session.commit()
+    return render_template('prediction.html',pred=pred,user=current_user)
 

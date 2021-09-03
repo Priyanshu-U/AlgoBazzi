@@ -1,3 +1,4 @@
+from datetime import date
 from sqlalchemy.orm import defaultload, query
 from . import db
 from flask_login import UserMixin
@@ -25,3 +26,9 @@ class Bio(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     data=db.Column(db.String(140),default='None')
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+class Pred(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    date=db.Column(db.String(25))
+    data=db.Column(db.String(20),default='None') 
+    

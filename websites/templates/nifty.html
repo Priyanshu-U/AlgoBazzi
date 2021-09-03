@@ -16,17 +16,20 @@
     </section>
     <section>
       <div class="chart">{{chart|safe}}</div>
-      <div class="info">
-        <span>{{pred}}</span>
-      </div>
+      <button>
+        <a href="/nifty/prediction" target="_blank">View Cost</a>
+      </button>
+      <!-- <iframe id="inlineFrameExample"
+    title="Inline Frame Example"
+    height="200"
+    style="border: 0px;width: 100%;"
+    src="http://127.0.0.1:5000/prediction.html">
+</iframe> -->
     </section>
   </main>
 </body>
 <script>
-  // select the element with data-title="Pan"
   var pan = document.querySelector('[data-title="Pan"]');
-  // activate the pan tool
   pan.click();
-  
 </script>
 {% endblock %}
